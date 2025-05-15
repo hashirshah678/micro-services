@@ -1,5 +1,6 @@
-import {snippets} from '../database/index.js'
+import { snippets } from '../database/index.js'
 import crypto from 'crypto';
+import axios from 'axios'
 
 export const createSnippet = async (req, res) => {
     const { title, snippetCode } = req.body;
@@ -15,20 +16,42 @@ export const createSnippet = async (req, res) => {
 
         const createAt = new Date().toISOString();
 
-        snippets[snippetId] ={
+        snippets[snippetId] = {
             id: snippetId,
             title: title,
             code: snippetCode,
             createdAt: createAt,
         }
+        try {
+            
+            // Best Place to Publish the event
+            axios.post('http://localhost:8005/events', {
+                type: 'SnippetCreated',
+                data: {
+                    id: snippetId,
+                    title: title,
+                    code: snippetCode,
+                    createdAt: createAt,
+                }
+            }).then((response) => {
+                console.log('Event published successfully:', response.data);
+            }).catch((error) => {
+                console.error('Error publishing event:', error.message);
+            });
+        } catch (error) {
+            console.error('Error publishing event:', error.message);
+            return res.status(500).json({ message: 'Failed to publish event' });
+        }
 
-        res.status(201).json({
+
+
+        return res.status(201).json({
             message: 'Snippet created successfully',
             success: true,
             snippet: snippets[snippetId],
         });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        console.error(error?.message);
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };

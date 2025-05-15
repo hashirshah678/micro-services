@@ -1,3 +1,7 @@
 client/node_modules/
 comments/node_modules/
 snippet/node_modules/
+client/build/
+comments/build/
+query/node_modules/
+message_broken/node_modules/

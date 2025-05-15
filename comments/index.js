@@ -14,6 +14,14 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/v1/snippet', router);
 
+
+app.post('/events', async (req, res) => {
+    const event = req.body;
+
+    console.log('Event received:', event);
+    return res.status(200).json({ success: true });
+});
+
 app.get('/', (req, res) => {
     res.send('Hello from Comment Express server!');
 });

@@ -1,6 +1,8 @@
 import crypto from 'crypto'
 import { comments as commentDB } from '../database/index.js';
 
+import axios from 'axios'
+
 export const commentCreate = async (req, res) => {
     const { id: snippetId } = req.params
     const { text } = req.body
@@ -8,7 +10,7 @@ export const commentCreate = async (req, res) => {
     const createdAt = new Date().toISOString()
 
     try {
-        const comments =  commentDB[snippetId] || [];
+        const comments = commentDB[snippetId] || [];
 
         comments.push({
             id: commentId,
@@ -17,8 +19,26 @@ export const commentCreate = async (req, res) => {
         })
 
         commentDB[snippetId] = comments
-    
-        res.status(201).json({
+
+        // Publish the event
+
+        axios.post('http://localhost:8005/events', {
+            type: 'CommentCreated',
+            data: {
+                id: commentId,
+                snippetId,
+                content: text,
+                createdAt
+            }
+        }).then((response) => {
+            console.log('Event published successfully:', response.data);
+        }).catch((error) => {
+            console.error('Error publishing event:', error.message);
+        });
+
+
+
+        return res.status(201).json({
             message: 'Comment created successfully',
             success: true,
             comment: {
@@ -27,9 +47,8 @@ export const commentCreate = async (req, res) => {
                 createdAt
             }
         })
-        
     } catch (error) {
         console.error('Error creating comment:', error)
-        res.status(500).json({ error: 'Internal server error' })
+        return res.status(500).json({ error: 'Internal server error' })
     }
 };

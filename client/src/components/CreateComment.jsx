@@ -1,33 +1,35 @@
 import axios from 'axios'
 import React from 'react'
 
-const CreateComment = ({ id }) => {
+const CreateComment = ({ id, Comments }) => {
 
     const [comment, setComment] = React.useState('')
 
-    const [comments, setComments] = React.useState([])
+    const [comments, setComments] = React.useState( Comments || [])
 
+
+    // comment the these LOC because backend is converted intp microservices
     
-    React.useEffect(() => {
-        const fetchSnippets = async () => {
-            try {
-                const resp = await axios.get(`http://localhost:8001/api/v1/snippet/${id}/comment`)
-                console.log('Fetched Comment:', resp.data)
-                if (resp.data.success) {
-                    setComments(resp.data.comments)
-                    // log('Snippets fetched successfully')
-                    console.log('snippets:', resp.data.comments);
+    // React.useEffect(() => {
+    //     const fetchSnippets = async () => {
+    //         try {
+    //             const resp = await axios.get(`http://localhost:8001/api/v1/snippet/${id}/comment`)
+    //             console.log('Fetched Comment:', resp.data)
+    //             if (resp.data.success) {
+    //                 setComments(resp.data.comments)
+    //                 // log('Snippets fetched successfully')
+    //                 console.log('snippets:', resp.data.comments);
 
-                } else {
-                    console.log('Failed to fetch Comments to this snippet', id);
-                }
-            } catch (error) {
-                console.error('Error fetching messages:', error)
-            }
-        }
+    //             } else {
+    //                 console.log('Failed to fetch Comments to this snippet', id);
+    //             }
+    //         } catch (error) {
+    //             console.error('Error fetching messages:', error)
+    //         }
+    //     }
 
-        fetchSnippets()
-    }, [])
+    //     fetchSnippets()
+    // }, [])
 
 
 

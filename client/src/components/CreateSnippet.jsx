@@ -53,7 +53,7 @@ export const CreateSnippet = () => {
     React.useEffect(() => {
         const fetchSnippets = async () => {
             try {
-                const resp = await axios.get('http://localhost:8000/api/v1/snippet')
+                const resp = await axios.get('http://localhost:8002/snippets')
                 console.log('Fetched snippets:', resp.data)
                 if (resp.data.success) {
                     setSnippets(resp.data.snippets)
@@ -102,7 +102,7 @@ export const CreateSnippet = () => {
                                     return (
                                         <div key={index} className='border  border-black p-4 rounded-md mb-4'>
                                             <h2 className='text-xl mb-2  font-bold'>{snippets[snippet].title}</h2>
-                                            <CreateComment id={snippets[snippet].id}/>   
+                                            <CreateComment id={snippets[snippet].id} Comments={snippets[snippet].comments} />   
                                         </div>
                                     )
                                 })

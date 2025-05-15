@@ -7,9 +7,9 @@ export const getAllCommentsBySinppetId = async (req, res) => {
     try {
         const allComments = commentDB[snippetId] || []
 
-        res.status(200).json({ comments: allComments, success: true, message: "Comments fetched successfully" })
+       return res.status(200).json({ comments: allComments, success: true, message: "Comments fetched successfully" })
     } catch (error) {
         console.error('Error fetching comments:', error)
-        res.status(500).json({ message: 'Internal server error', success: false })
+       return res.status(500).json({ message: 'Internal server error', success: false })
     }
 }
